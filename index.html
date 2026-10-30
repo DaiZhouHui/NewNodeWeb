@@ -2484,7 +2484,13 @@
         );
         toggleIcon.textContent = initiallyDark ? "🌙" : "☀️";
         toggleLabel.textContent = `样式：${initialThemeName}`;
+        initMobileThemeButtonDrag(toggleBtn);
         toggleBtn.addEventListener("click", () => {
+          if (toggleBtn.dataset.dragged === "true") {
+            delete toggleBtn.dataset.dragged;
+            return;
+          }
+
           const isDark = root.dataset.theme !== "dark";
           const theme = isDark ? "dark" : "light";
           const currentThemeName = isDark ? "暗夜模式" : "浅色模式";
@@ -2505,6 +2511,100 @@
           } catch (error) {
             console.warn("保存主题偏好失败", error);
           }
+        });
+      }
+
+      function initMobileThemeButtonDrag(toggleBtn) {
+        const quickActions = toggleBtn.parentElement;
+        const dragPositionKey = "vless-node-theme-button-position-v1";
+        const mobileViewport = window.matchMedia("(max-width: 768px)");
+        let dragStart = null;
+        let dragged = false;
+
+        function clampPosition(left, top) {
+          const buttonRect = toggleBtn.getBoundingClientRect();
+          return {
+            left: Math.max(0, Math.min(left, window.innerWidth - buttonRect.width)),
+            top: Math.max(0, Math.min(top, window.innerHeight - buttonRect.height)),
+          };
+        }
+
+        function setPosition(left, top) {
+          const position = clampPosition(left, top);
+          quickActions.style.left = `${position.left}px`;
+          quickActions.style.top = `${position.top}px`;
+          quickActions.style.right = "auto";
+          quickActions.style.bottom = "auto";
+          return position;
+        }
+
+        if (mobileViewport.matches) {
+          try {
+            const savedPosition = JSON.parse(
+              localStorage.getItem(dragPositionKey) || "null",
+            );
+            if (
+              savedPosition &&
+              Number.isFinite(savedPosition.left) &&
+              Number.isFinite(savedPosition.top)
+            ) {
+              setPosition(savedPosition.left, savedPosition.top);
+            }
+          } catch (error) {
+            console.warn("读取主题按钮位置失败", error);
+          }
+        }
+
+        toggleBtn.addEventListener("pointerdown", (event) => {
+          if (!mobileViewport.matches || event.button !== 0) return;
+
+          const rect = toggleBtn.getBoundingClientRect();
+          dragStart = {
+            pointerId: event.pointerId,
+            pointerX: event.clientX,
+            pointerY: event.clientY,
+            left: rect.left,
+            top: rect.top,
+          };
+          dragged = false;
+          toggleBtn.setPointerCapture(event.pointerId);
+        });
+
+        toggleBtn.addEventListener("pointermove", (event) => {
+          if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+
+          const deltaX = event.clientX - dragStart.pointerX;
+          const deltaY = event.clientY - dragStart.pointerY;
+          if (!dragged && Math.hypot(deltaX, deltaY) < 6) return;
+
+          dragged = true;
+          event.preventDefault();
+          const position = setPosition(
+            dragStart.left + deltaX,
+            dragStart.top + deltaY,
+          );
+          toggleBtn.dataset.dragged = "true";
+          try {
+            localStorage.setItem(dragPositionKey, JSON.stringify(position));
+          } catch (error) {
+            console.warn("保存主题按钮位置失败", error);
+          }
+        });
+
+        function finishDrag(event) {
+          if (!dragStart || event.pointerId !== dragStart.pointerId) return;
+          if (toggleBtn.hasPointerCapture(event.pointerId)) {
+            toggleBtn.releasePointerCapture(event.pointerId);
+          }
+          dragStart = null;
+        }
+
+        toggleBtn.addEventListener("pointerup", finishDrag);
+        toggleBtn.addEventListener("pointercancel", finishDrag);
+        window.addEventListener("resize", () => {
+          if (!mobileViewport.matches || !quickActions.style.top) return;
+          const rect = toggleBtn.getBoundingClientRect();
+          setPosition(rect.left, rect.top);
         });
       }
 

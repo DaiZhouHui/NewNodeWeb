@@ -2104,3 +2104,52 @@ input.not-detected {
   color: inherit;
   white-space: nowrap;
 }
+
+@media (max-width: 768px) {
+  .toggle-header-btn {
+    display: none;
+  }
+
+  .quick-actions {
+    position: fixed;
+    top: auto;
+    bottom: max(8px, env(safe-area-inset-bottom));
+    left: max(8px, env(safe-area-inset-left));
+    z-index: 1100;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .quick-actions .quick-btn:not(#themeToggleBtn) {
+    display: none;
+  }
+
+  .quick-actions #themeToggleBtn {
+    display: flex;
+    touch-action: none;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    justify-content: center;
+    padding: 0;
+    gap: 0;
+    border-radius: 999px;
+    font-size: 16px;
+  }
+
+  .quick-actions #themeToggleBtn > span[aria-hidden="true"] {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+    justify-content: center;
+    background: transparent;
+  }
+
+  .quick-actions #themeToggleBtn .quick-btn-label {
+    display: none;
+  }
+}
