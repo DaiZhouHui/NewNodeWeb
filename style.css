@@ -661,13 +661,21 @@ input.not-detected {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 
 .result-header h3 {
   color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
+}
+
+.result-header .button-group {
+  margin-top: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .result-content {

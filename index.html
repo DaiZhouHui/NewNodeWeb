@@ -717,6 +717,9 @@
               <button class="card-tab-btn" data-tab="local-base64-tab">
                 本地订阅包
               </button>
+              <button class="card-tab-btn" data-tab="remote-vless-tab">
+                远程Vless
+              </button>
               <button class="card-tab-btn" data-tab="merged-tab">
                 合并Vless
               </button>
@@ -781,6 +784,33 @@
               </div>
               <div class="help-text">
                 此Base64可直接作为订阅链接导入Clash、Shadowrocket等工具
+              </div>
+            </div>
+
+            <!-- 远程Vless标签页 -->
+            <div class="card-tab-content" id="remote-vless-tab">
+              <div class="result-header">
+                <h3>
+                  🔗 Vless链接（远程下载）
+                  <span id="remoteVlessCount" class="node-counter">0节点</span>
+                </h3>
+                <div class="button-group">
+                  <button id="generateRemoteVlessBtn" class="btn btn-primary">
+                    <span>⚡</span> 替换生成Vless节点
+                  </button>
+                  <button id="copyRemoteVlessBtn" class="btn btn-success">
+                    <span>📋</span> 复制全部Vless链接
+                  </button>
+                </div>
+              </div>
+              <div class="result-box">
+                <div id="remote-vless-links" class="result-content empty">
+                  点击“下载远程订阅”后，远程Vless链接将在这里显示...
+                </div>
+              </div>
+              <div class="help-text">
+                使用当前配置（UUID、Host、SNI、Path、ECH）替换远程下载的Vless参数，逻辑与“Vless直链 +
+                生成Vless节点”相同，数据来源为远程订阅。
               </div>
             </div>
 
@@ -1936,6 +1966,14 @@
           .addEventListener("click", () =>
             copyText(data.vlessLinks.join("\n")),
           );
+        document
+          .getElementById("copyRemoteVlessBtn")
+          .addEventListener("click", () =>
+            copyText(data.remoteNodes.join("\n")),
+          );
+        document
+          .getElementById("generateRemoteVlessBtn")
+          .addEventListener("click", generateRemoteVless);
         // 移除downloadVlessBtn事件监听，只保留downloadAllBtn
         document
           .getElementById("downloadAllBtn")
@@ -2331,6 +2369,7 @@
         data.plainSha = null;
         data.optimalSha = null;
         data.locationSha = null;
+        displayRemoteVlessLinks();
         updateStats();
         console.log("🗑️ 远程缓存已清除");
         addLog("缓存清理", "远程节点缓存已清除", "info");
@@ -3799,6 +3838,7 @@
             ) {
               data.remoteNodes = [...data.cache.remoteNodes];
               data.stats.remote = data.remoteNodes.length;
+              displayRemoteVlessLinks();
               updateStats();
             }
 
@@ -4650,6 +4690,67 @@
           `${data.vlessLinks.length}节点`;
       }
 
+      function displayRemoteVlessLinks() {
+        const el = document.getElementById("remote-vless-links");
+        const countEl = document.getElementById("remoteVlessCount");
+        if (!el) return;
+        el.textContent = data.remoteNodes.length
+          ? data.remoteNodes.join("\n\n")
+          : "点击“下载远程订阅”后，远程Vless链接将在这里显示...";
+        el.classList.toggle("empty", data.remoteNodes.length === 0);
+        if (countEl) {
+          countEl.textContent = `${data.remoteNodes.length}节点`;
+        }
+      }
+
+      function generateRemoteVless() {
+        showLoading(true, "generateRemoteVlessBtn");
+        try {
+          const remoteLinks = (data.remoteNodes || []).filter((line) =>
+            String(line).trim().startsWith("vless://"),
+          );
+          if (remoteLinks.length === 0) {
+            showNotification(
+              "生成节点失败",
+              "请先点击“下载远程订阅”，当前没有可替换的远程Vless链接",
+              "error",
+            );
+            return;
+          }
+
+          const config = getConfig();
+          const generated = remoteLinks.map((link) =>
+            updateDirectVlessConfig(link, config),
+          );
+
+          data.remoteNodes = generated;
+          data.stats.remote = generated.length;
+          data.cache.remoteNodes = [...generated];
+          displayRemoteVlessLinks();
+          updateStats();
+
+          showNotification(
+            "节点生成成功",
+            `已按当前配置替换生成 ${generated.length} 个远程Vless节点`,
+            "success",
+          );
+          addLog(
+            "替换远程Vless",
+            `成功替换生成 ${generated.length} 个远程Vless节点`,
+            "success",
+          );
+        } catch (e) {
+          showNotification(
+            "节点生成失败",
+            "替换远程Vless时发生错误: " + e.message,
+            "error",
+          );
+          addLog("替换远程Vless", "生成失败: " + e.message, "error");
+        } finally {
+          showLoading(false, "generateRemoteVlessBtn");
+        }
+      }
+
       // 新增：HTML转义辅助函数（防止XSS）
       function escapeHtml(str) {
         const div = document.createElement("div");
@@ -5297,6 +5398,7 @@
               // 使用缓存数据
               data.remoteNodes = [...data.cache.remoteNodes];
               data.stats.remote = data.remoteNodes.length;
+              displayRemoteVlessLinks();
               updateStats();
               mergeAndShow();
             },
@@ -5321,6 +5423,7 @@
               if (remoteCount === 0 && cachedRemoteCount > 0) {
                 data.remoteNodes = [...data.cache.remoteNodes];
                 data.stats.remote = data.remoteNodes.length;
+                displayRemoteVlessLinks();
                 updateStats();
               }
               mergeAndShow();
@@ -5727,6 +5830,7 @@
 
           data.remoteNodes = uniqueNodes;
           data.stats.remote = data.remoteNodes.length;
+          displayRemoteVlessLinks();
 
           // 更新缓存
           data.cache.remoteNodes = [...data.remoteNodes];
