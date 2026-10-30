@@ -6,6 +6,31 @@
     <title>Vless节点生成工具-部署在GitHub Pages</title>
     <link rel="icon" href="./style/ico.png" type="image/png" />
     <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="stylesheet"
+      href="./dark-theme.css"
+      id="darkThemeStylesheet"
+    />
+    <script>
+      (() => {
+        const themeStylesheet = document.getElementById(
+          "darkThemeStylesheet",
+        );
+        let theme = "light";
+
+        try {
+          const savedTheme = localStorage.getItem("vless-node-theme-v2");
+          if (savedTheme === "light" || savedTheme === "dark") {
+            theme = savedTheme;
+          }
+        } catch (error) {
+          console.warn("读取主题偏好失败", error);
+        }
+
+        document.documentElement.dataset.theme = theme;
+        themeStylesheet.disabled = theme !== "dark";
+      })();
+    </script>
   </head>
 
   <body>
@@ -21,6 +46,18 @@
 
       <!-- 快捷操作按钮组（调整了顺序） -->
       <div class="quick-actions">
+        <button
+          class="quick-btn"
+          id="themeToggleBtn"
+          type="button"
+          aria-pressed="false"
+          aria-label="当前样式：浅色模式，点击切换到暗夜模式"
+        >
+          <span id="themeToggleIcon" aria-hidden="true">☀️</span>
+          <span class="quick-btn-label" id="themeToggleLabel">
+            样式：浅色模式
+          </span>
+        </button>
         <button class="quick-btn" onclick="generateVless()">
           <span>⚡</span> 生成节点
         </button>
@@ -1541,6 +1578,7 @@
         initTabs();
         initAccordion();
         initHeaderToggle();
+        initThemeToggle();
 
         // 初始化版本号显示（日期版号，短格式：YY.MM.DD.HH）
         try {
@@ -2429,6 +2467,47 @@
       }
 
       // 初始化标题显示/隐藏
+      function initThemeToggle() {
+        const root = document.documentElement;
+        const stylesheet = document.getElementById("darkThemeStylesheet");
+        const toggleBtn = document.getElementById("themeToggleBtn");
+        const toggleIcon = document.getElementById("themeToggleIcon");
+        const toggleLabel = document.getElementById("themeToggleLabel");
+        const initiallyDark = root.dataset.theme === "dark";
+        const initialThemeName = initiallyDark ? "暗夜模式" : "浅色模式";
+        const initialNextThemeName = initiallyDark ? "浅色模式" : "暗夜模式";
+
+        toggleBtn.setAttribute("aria-pressed", String(initiallyDark));
+        toggleBtn.setAttribute(
+          "aria-label",
+          `当前样式：${initialThemeName}，点击切换到${initialNextThemeName}`,
+        );
+        toggleIcon.textContent = initiallyDark ? "🌙" : "☀️";
+        toggleLabel.textContent = `样式：${initialThemeName}`;
+        toggleBtn.addEventListener("click", () => {
+          const isDark = root.dataset.theme !== "dark";
+          const theme = isDark ? "dark" : "light";
+          const currentThemeName = isDark ? "暗夜模式" : "浅色模式";
+          const nextThemeName = isDark ? "浅色模式" : "暗夜模式";
+
+          root.dataset.theme = theme;
+          stylesheet.disabled = !isDark;
+          toggleBtn.setAttribute("aria-pressed", String(isDark));
+          toggleBtn.setAttribute(
+            "aria-label",
+            `当前样式：${currentThemeName}，点击切换到${nextThemeName}`,
+          );
+          toggleIcon.textContent = isDark ? "🌙" : "☀️";
+          toggleLabel.textContent = `样式：${currentThemeName}`;
+
+          try {
+            localStorage.setItem("vless-node-theme-v2", theme);
+          } catch (error) {
+            console.warn("保存主题偏好失败", error);
+          }
+        });
+      }
+
       function initHeaderToggle() {
         const toggleBtn = document.getElementById("toggleHeaderBtn");
         const headerInfo = document.getElementById("headerInfo");

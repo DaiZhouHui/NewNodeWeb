@@ -1,0 +1,533 @@
+/* Deep-workbench visual system */
+:root {
+  color-scheme: dark;
+  --primary-color: #69e2c0;
+  --secondary-color: #35b99a;
+  --page-gradient-start: #09121b;
+  --page-gradient-end: #0c1722;
+  --surface-color: #111d28;
+  --surface-subtle: #0d1822;
+  --text-primary: #e8f0f5;
+  --text-secondary: #b1c0ca;
+  --text-muted: #7e929f;
+  --border-color: #263745;
+  --shadow-card: 0 18px 48px rgba(0, 0, 0, 0.24);
+  --focus-ring: 0 0 0 3px rgba(105, 226, 192, 0.2);
+  --btn-blue-start: #36bea0;
+  --btn-blue-end: #258d7b;
+  --btn-green-start: #35bd8a;
+  --btn-green-end: #248b69;
+  --btn-cyan-start: #38abc1;
+  --btn-cyan-end: #287c91;
+  --btn-orange-start: #cf9850;
+  --btn-orange-end: #a97537;
+  --btn-red-start: #c97b63;
+  --btn-red-end: #a85b4e;
+  --success-color: #55d5a5;
+  --info-color: #57bfd0;
+  --warning-color: #e2b269;
+  --danger-color: #e5837b;
+  --github-color: #8297a5;
+  --light-color: #172530;
+  --box-shadow: var(--shadow-card);
+  --card-bg: var(--surface-color);
+}
+
+body {
+  background: radial-gradient(ellipse at 10% -12%, rgba(35, 122, 112, 0.2), transparent 34rem),
+    radial-gradient(ellipse at 100% 14%, rgba(43, 91, 128, 0.13), transparent 38rem),
+    linear-gradient(145deg, var(--page-gradient-start), var(--page-gradient-end));
+  color: var(--text-primary);
+}
+
+.header-info {
+  border-bottom-color: rgba(126, 158, 173, 0.19);
+}
+
+.header-info h1 {
+  color: #f0f7fa;
+}
+
+.header-info p {
+  color: #91a6b1;
+}
+
+.toggle-header-btn {
+  background: #14232e;
+  border-color: #304550;
+  color: #bdd0d8;
+}
+
+.toggle-header-btn:hover {
+  background: #1a3039;
+  border-color: #5a988e;
+  color: #e6f4f3;
+}
+
+.quick-actions {
+  border-color: #263945;
+  background: rgba(15, 27, 38, 0.88);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+}
+
+.quick-btn {
+  border-color: #2a3c48;
+  background: #14232e;
+  color: #c4d2d9;
+}
+
+.quick-btn span {
+  background: rgba(105, 226, 192, 0.1);
+  color: #83e9ca;
+}
+
+.quick-btn:hover {
+  border-color: #4a8f81;
+  background: #1a3038;
+  color: #f1fbf8;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.card {
+  background: linear-gradient(160deg, #14212c 0%, #101a24 100%);
+  border-color: #2a3a46;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.22);
+}
+
+.main-layout > .card:nth-child(1) {
+  border-top-color: #61d9bb;
+}
+
+.main-layout > .card:nth-child(2) {
+  border-top-color: #64b7d1;
+}
+
+.main-layout > .card:nth-child(3) {
+  border-top-color: #a68ae3;
+}
+
+.main-layout > .card:nth-child(4) {
+  border-top-color: #d5ab69;
+}
+
+.card-header {
+  background: transparent;
+  border-bottom-color: #263743;
+}
+
+.card-header h2 {
+  color: #e9f2f5;
+}
+
+.card-body {
+  color: var(--text-primary);
+}
+
+.section-title {
+  color: #dce8ed;
+  border-bottom-color: #293a46;
+}
+
+.form-group label,
+label {
+  color: #bdcbd2;
+}
+
+input,
+textarea,
+select,
+.link-input {
+  border-color: #30424e;
+  background: #0c1721;
+  color: #e4edf1;
+  color-scheme: dark;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #687e8b;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #54c9a9;
+  background: #101f29;
+  box-shadow: 0 0 0 3px rgba(84, 201, 169, 0.15);
+}
+
+textarea:disabled {
+  background: #111d27;
+  border-color: #293b47;
+  color: #8497a2;
+}
+
+.checkbox-group label,
+.token-save-label {
+  color: #aebfc8;
+}
+
+.file-upload-area {
+  border-color: #47606b;
+  background: linear-gradient(rgba(18, 35, 46, 0.88), rgba(15, 28, 38, 0.94)),
+    repeating-linear-gradient(135deg, transparent 0 9px, rgba(105, 226, 192, 0.035) 9px 10px);
+}
+
+.file-upload-area:hover,
+.file-upload-area.dragover {
+  border-color: #6ae2c1;
+  background: #122a30;
+  box-shadow: inset 0 0 0 1px rgba(105, 226, 192, 0.12);
+}
+
+.file-upload-area .upload-icon {
+  color: #75e5c4;
+  filter: drop-shadow(0 5px 16px rgba(105, 226, 192, 0.2));
+}
+
+.file-upload-area p {
+  color: #e0eaed;
+}
+
+.file-upload-area small,
+.file-size,
+.help-text,
+.csv-form-group .help-inline {
+  color: #8297a3;
+}
+
+.file-info,
+.smart-split-info,
+.csv-example {
+  background: #12242c;
+  border-color: #2b494d;
+  color: #c2d7d6;
+}
+
+.file-name,
+.smart-split-info h4 {
+  color: #e0efed;
+}
+
+.github-config {
+  background: #0d1923;
+  border-color: #2a3b47;
+}
+
+.github-config-help {
+  background: #14242e;
+  border-color: #30434e;
+  color: #9aadb6;
+}
+
+.github-config-help a {
+  color: #78dfc0;
+}
+
+.card-tab-navigation {
+  background: #0c1721;
+  border-color: #293a46;
+}
+
+.card-tab-btn {
+  color: #91a4ae;
+}
+
+.card-tab-btn.active {
+  background: #203b3d;
+  color: #8ce8cb;
+  box-shadow: inset 0 0 0 1px rgba(105, 226, 192, 0.2);
+}
+
+.card-tab-btn:hover:not(.active) {
+  background: #172832;
+  color: #d9e7ea;
+}
+
+.accordion-header {
+  background: #14232d;
+  border-color: #2b3d48;
+  color: #8de2c5;
+}
+
+.accordion-header:hover {
+  background: #1a3038;
+}
+
+.accordion-content {
+  background: #0e1923;
+  border-color: #293b47;
+}
+
+.generate-section,
+.result-box {
+  background: #0d1822;
+  border-color: #2b3b47;
+}
+
+.result-box::before {
+  background: linear-gradient(180deg, #75e5c4, #55a9c1);
+}
+
+.result-header h3 {
+  color: #dce8ed;
+}
+
+.result-content {
+  background: #09131c;
+  border-color: #253743;
+  color: #bbd0d6;
+}
+
+.result-content.empty {
+  color: #718692;
+}
+
+.github-buttons .btn {
+  border-color: rgba(201, 223, 229, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.btn-primary,
+.btn-primary:hover {
+  background: linear-gradient(135deg, #30b793, #21846f);
+  color: #f3fffb;
+}
+
+.btn-success,
+.btn-upload-merged {
+  background: linear-gradient(135deg, #35bd8a, #248b69);
+}
+
+.btn-info,
+.btn-subscription-upload {
+  background: linear-gradient(135deg, #38abc1, #287c91);
+}
+
+.btn-warning,
+.btn-merge-upload {
+  background: linear-gradient(135deg, #c7914b, #9d6c35);
+}
+
+.btn-github {
+  background: linear-gradient(135deg, #3c515c, #293b45);
+}
+
+.btn-local-upload {
+  background: linear-gradient(135deg, #7a70c9, #5752a3);
+}
+
+.btn-oneclick-sync {
+  background: linear-gradient(135deg, #a870ad, #815285);
+}
+
+.btn-merge-to-path {
+  background: linear-gradient(135deg, #a85d55, #844443);
+}
+
+.quick-btn:focus-visible,
+.btn:focus-visible,
+.card-tab-btn:focus-visible,
+.accordion-header:focus-visible,
+.custom-dialog-btn:focus-visible {
+  outline-color: #77e7c7;
+}
+
+.source-badge {
+  background: linear-gradient(135deg, #ba6680, #9e536d);
+  color: #fff3f6;
+}
+
+.node-counter {
+  background: #175c50;
+  color: #a4f0d7;
+  border-color: rgba(105, 226, 192, 0.22);
+}
+
+.stat-item,
+.proxy-tool-item {
+  background: #13212b;
+  border-color: #2a3c48;
+  color: var(--text-secondary);
+}
+
+.stat-label {
+  color: #8da1ac;
+}
+
+.stat-value {
+  color: #7ee4c4;
+}
+
+.github-links-section {
+  background: #0e1923;
+  border-color: #293a46;
+}
+
+.github-links-section h3,
+.link-label,
+.tool-info h4 {
+  color: #dce8ed;
+}
+
+.proxy-tool-item:hover {
+  background: #182a34;
+  border-color: #47665f;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.tool-info p {
+  color: #8da1ac;
+}
+
+.status-success,
+.status-error,
+.status-info {
+  border-color: transparent;
+}
+
+.status-success {
+  background: #112a26;
+  border-color: #245247;
+  border-left-color: #55d5a5;
+  color: #a8e7c8;
+}
+
+.status-error {
+  background: #2c1b20;
+  border-color: #563239;
+  border-left-color: #e5837b;
+  color: #f0b5ac;
+}
+
+.status-info {
+  background: #14262f;
+  border-color: #2d4b56;
+  border-left-color: #57bfd0;
+  color: #b6dce1;
+}
+
+.card-tab-btn:hover:not(.active) {
+  background: #172832;
+}
+
+.notification {
+  border-color: #30434e;
+  background: #13212c;
+  color: #dce8ed;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.38);
+}
+
+.notification-time {
+  background: #0d1822;
+  color: #8da1ac;
+}
+
+.notification-message {
+  color: #b3c2ca;
+}
+
+.log-section {
+  background: #0c1721;
+  border-color: #2c404c;
+}
+
+.log-header {
+  border-bottom-color: #2b3d48;
+}
+
+.log-header h3 {
+  color: #e1edf0;
+}
+
+.log-time {
+  color: #8da3ae;
+}
+
+.log-message {
+  color: #c2d0d5;
+}
+
+.log-content {
+  color: #c1d2d7;
+}
+
+#columnDetectionResult.success {
+  background: #112923;
+  border-color: #285247;
+}
+
+#columnDetectionResult.success #detectionSummary {
+  background: #142f29;
+  color: #a8e7c8;
+  border-color: #2d5a4b;
+}
+
+#columnDetectionResult.warning {
+  background: #2a2419;
+  border-color: #59472c;
+}
+
+#columnDetectionResult.warning #detectionSummary {
+  background: #31291b;
+  color: #e9c88f;
+  border-color: #685331;
+}
+
+#detectionDetails {
+  background: #17232a;
+  border-color: #33434a;
+  color: #c1d0d5;
+}
+
+#detectionDetails strong {
+  color: #8cdbc4;
+}
+
+#previewModal .custom-dialog {
+  background: #111d28 !important;
+  border-color: #344752;
+  color: #e4edf1;
+}
+
+#previewModal .custom-dialog > div,
+#previewModal .custom-dialog span,
+#previewModal .custom-dialog td,
+#previewModal .custom-dialog th {
+  color: #d4e0e5 !important;
+}
+
+#previewModal .custom-dialog table {
+  background: #0d1822 !important;
+  border-color: #30414c !important;
+}
+
+#previewModal .custom-dialog th {
+  background: #1a2a35 !important;
+  border-bottom-color: #364c57 !important;
+}
+
+#previewModal .custom-dialog td {
+  background: transparent !important;
+  border-bottom-color: #293a45 !important;
+}
+
+#previewModal .custom-dialog code {
+  color: #9de3ca !important;
+}
+
+#qrModal .custom-dialog {
+  background: #111d28 !important;
+  border-color: #344752;
+  color: #e4edf1;
+}
+
+#qrModal .custom-dialog div,
+#qrModal .custom-dialog span {
+  color: #d4e0e5 !important;
+}
+
+#qrImage {
+  border-color: #344752 !important;
+  background: #fff;
+}
