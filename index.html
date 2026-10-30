@@ -11,16 +11,30 @@
       href="./dark-theme.css"
       id="darkThemeStylesheet"
     />
+    <script src="./config.js"></script>
     <script>
       (() => {
         const themeStylesheet = document.getElementById(
           "darkThemeStylesheet",
         );
-        let theme = "light";
+        const supportedThemes = ["light", "dark", "style3", "style4"];
+        const configuredThemes = [null, "light", "dark", "style3", "style4"];
+        const configuredDefaultTheme =
+          window.NODE_WEB_CONFIG &&
+          configuredThemes[window.NODE_WEB_CONFIG.defaultTheme];
+        let theme = "style3";
+
+        if (configuredDefaultTheme) {
+          theme = configuredDefaultTheme;
+        } else {
+          console.warn(
+            "默认主题配置无效，请在 config.js 中将 defaultTheme 设置为 1 到 4",
+          );
+        }
 
         try {
           const savedTheme = localStorage.getItem("vless-node-theme-v2");
-          if (savedTheme === "light" || savedTheme === "dark") {
+          if (supportedThemes.includes(savedTheme)) {
             theme = savedTheme;
           }
         } catch (error) {
@@ -28,7 +42,7 @@
         }
 
         document.documentElement.dataset.theme = theme;
-        themeStylesheet.disabled = theme !== "dark";
+        themeStylesheet.disabled = theme !== "dark" && theme !== "style4";
       })();
     </script>
   </head>
@@ -2473,17 +2487,30 @@
         const toggleBtn = document.getElementById("themeToggleBtn");
         const toggleIcon = document.getElementById("themeToggleIcon");
         const toggleLabel = document.getElementById("themeToggleLabel");
-        const initiallyDark = root.dataset.theme === "dark";
-        const initialThemeName = initiallyDark ? "暗夜模式" : "浅色模式";
-        const initialNextThemeName = initiallyDark ? "浅色模式" : "暗夜模式";
-
-        toggleBtn.setAttribute("aria-pressed", String(initiallyDark));
-        toggleBtn.setAttribute(
-          "aria-label",
-          `当前样式：${initialThemeName}，点击切换到${initialNextThemeName}`,
+        const themes = [
+          { id: "light", name: "经典浅色", icon: "☀️", dark: false },
+          { id: "dark", name: "经典暗夜", icon: "🌙", dark: true },
+          { id: "style3", name: "澄光浅色", icon: "🌿", dark: false },
+          { id: "style4", name: "澄光暗夜", icon: "🌌", dark: true },
+        ];
+        let activeThemeIndex = Math.max(
+          0,
+          themes.findIndex((theme) => theme.id === root.dataset.theme),
         );
-        toggleIcon.textContent = initiallyDark ? "🌙" : "☀️";
-        toggleLabel.textContent = `样式：${initialThemeName}`;
+
+        function updateThemeControl() {
+          const currentTheme = themes[activeThemeIndex];
+          const nextTheme = themes[(activeThemeIndex + 1) % themes.length];
+          toggleBtn.setAttribute("aria-pressed", String(currentTheme.dark));
+          toggleBtn.setAttribute(
+            "aria-label",
+            `当前样式：${currentTheme.name}，点击切换到${nextTheme.name}`,
+          );
+          toggleIcon.textContent = currentTheme.icon;
+          toggleLabel.textContent = `样式：${currentTheme.name}`;
+        }
+
+        updateThemeControl();
         initMobileThemeButtonDrag(toggleBtn);
         toggleBtn.addEventListener("click", () => {
           if (toggleBtn.dataset.dragged === "true") {
@@ -2491,23 +2518,14 @@
             return;
           }
 
-          const isDark = root.dataset.theme !== "dark";
-          const theme = isDark ? "dark" : "light";
-          const currentThemeName = isDark ? "暗夜模式" : "浅色模式";
-          const nextThemeName = isDark ? "浅色模式" : "暗夜模式";
-
-          root.dataset.theme = theme;
-          stylesheet.disabled = !isDark;
-          toggleBtn.setAttribute("aria-pressed", String(isDark));
-          toggleBtn.setAttribute(
-            "aria-label",
-            `当前样式：${currentThemeName}，点击切换到${nextThemeName}`,
-          );
-          toggleIcon.textContent = isDark ? "🌙" : "☀️";
-          toggleLabel.textContent = `样式：${currentThemeName}`;
+          activeThemeIndex = (activeThemeIndex + 1) % themes.length;
+          const theme = themes[activeThemeIndex];
+          root.dataset.theme = theme.id;
+          stylesheet.disabled = theme.id !== "dark" && theme.id !== "style4";
+          updateThemeControl();
 
           try {
-            localStorage.setItem("vless-node-theme-v2", theme);
+            localStorage.setItem("vless-node-theme-v2", theme.id);
           } catch (error) {
             console.warn("保存主题偏好失败", error);
           }
@@ -2699,6 +2717,7 @@
         }
 
         document.getElementById("fileInfo").classList.add("show");
+        document.getElementById("dropArea").classList.add("has-file");
         document.getElementById("csvInput").value = "";
         data.currentSource = "file";
         updateSourceBadge();
@@ -2818,6 +2837,7 @@
             file.size,
           );
           document.getElementById("fileInfo").classList.add("show");
+          document.getElementById("dropArea").classList.add("has-file");
           document.getElementById("csvInput").value = "";
           updateSourceBadge();
           // 更新CSV输入框状态
@@ -2852,6 +2872,7 @@
         data.currentSource = "none";
         data.uploadedFiles = []; // 清除已上传文件列表
         document.getElementById("fileInfo").classList.remove("show");
+        document.getElementById("dropArea").classList.remove("has-file");
         document.getElementById("fileInput").value = "";
         document.getElementById("fileName").textContent = "";
         document.getElementById("fileSize").textContent = "";
