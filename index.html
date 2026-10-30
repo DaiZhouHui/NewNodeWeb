@@ -17,8 +17,23 @@
         const themeStylesheet = document.getElementById(
           "darkThemeStylesheet",
         );
-        const supportedThemes = ["light", "dark", "style3", "style4"];
-        const configuredThemes = [null, "light", "dark", "style3", "style4"];
+        const supportedThemes = [
+          "light",
+          "dark",
+          "style3",
+          "style4",
+          "style5",
+          "style6",
+        ];
+        const configuredThemes = [
+          null,
+          "light",
+          "dark",
+          "style3",
+          "style4",
+          "style5",
+          "style6",
+        ];
         const configuredDefaultTheme =
           window.NODE_WEB_CONFIG &&
           configuredThemes[window.NODE_WEB_CONFIG.defaultTheme];
@@ -28,7 +43,7 @@
           theme = configuredDefaultTheme;
         } else {
           console.warn(
-            "默认主题配置无效，请在 config.js 中将 defaultTheme 设置为 1 到 4",
+            "默认主题配置无效，请在 config.js 中将 defaultTheme 设置为 1 到 6",
           );
         }
 
@@ -42,6 +57,12 @@
         }
 
         document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle(
+          "show-merged-upload-buttons",
+          window.NODE_WEB_CONFIG &&
+            window.NODE_WEB_CONFIG.showMergedSubscriptionUploadButtons ===
+              true,
+        );
         themeStylesheet.disabled = theme !== "dark" && theme !== "style4";
       })();
     </script>
@@ -87,13 +108,22 @@
         <!-- <button class="quick-btn" onclick="uploadLocalBase64ToPath()">
                 <span>📤</span> 上传本地订阅至指定路径
             </button> -->
-        <button class="quick-btn" onclick="uploadMergedOptimal()">
+        <button
+          class="quick-btn merged-subscription-upload-button"
+          onclick="uploadMergedOptimal()"
+        >
           <span>📤</span> 上传合并优选订阅
         </button>
-        <button class="quick-btn" onclick="uploadMergedBase64()">
+        <button
+          class="quick-btn merged-subscription-upload-button"
+          onclick="uploadMergedBase64()"
+        >
           <span>📤</span> 上传合并主要订阅
         </button>
-        <button class="quick-btn" onclick="uploadPlainNodes()">
+        <button
+          class="quick-btn merged-subscription-upload-button"
+          onclick="uploadPlainNodes()"
+        >
           <span>📤</span> 上传合并明文订阅
         </button>
         <button class="quick-btn" onclick="toggleLog()">
@@ -881,11 +911,11 @@
                   <div class="form-group">
                     <label for="downloadUrlSelect">下载远程订阅路径：</label>
                     <select id="downloadUrlSelect">
-                      <option value="MainNode">MainNode（主要订阅）</option>
-                      <option value="OptimalNode">
-                        OptimalNode（优选订阅）
+                      <option value="Main">Main（主要订阅）</option>
+                      <option value="Optimal" selected>
+                        Optimal（优选订阅）
                       </option>
-                      <option value="PlainNode">PlainNode（明文订阅）</option>
+                      <option value="Plain">Plain（明文订阅）</option>
                       <option value="custom">自定义路径</option>
                     </select>
                     <input
@@ -900,11 +930,11 @@
                   <div class="form-group">
                     <label for="uploadPathSelect">订阅待上传路径：</label>
                     <select id="uploadPathSelect">
-                      <option value="OptimalNode">
-                        OptimalNode（优选订阅）
+                      <option value="Optimal">
+                        Optimal（优选订阅）
                       </option>
-                      <option value="MainNode">MainNode（主要订阅）</option>
-                      <option value="PlainNode">PlainNode（明文订阅）</option>
+                      <option value="Main">Main（主要订阅）</option>
+                      <option value="Plain">Plain（明文订阅）</option>
                       <option value="custom">自定义路径</option>
                     </select>
                     <input
@@ -942,18 +972,18 @@
                     <input
                       type="text"
                       id="optimalNodeFile"
-                      value="OptimalNode"
+                      value="Optimal"
                     />
                   </div>
 
                   <div class="form-group">
                     <label for="mainNodeFile">主要订阅文件</label>
-                    <input type="text" id="mainNodeFile" value="MainNode" />
+                    <input type="text" id="mainNodeFile" value="Main" />
                   </div>
 
                   <div class="form-group">
                     <label for="plainNodeFile">明文订阅文件</label>
-                    <input type="text" id="plainNodeFile" value="PlainNode" />
+                    <input type="text" id="plainNodeFile" value="Plain" />
                   </div>
                 </div>
 
@@ -967,7 +997,7 @@
                       <input
                         type="text"
                         id="deleteFileName"
-                        placeholder="例如：OptimalNode"
+                        placeholder="例如：Optimal"
                         style="flex: 1"
                       />
                       <button id="deleteRemoteFileBtn" class="btn btn-warning">
@@ -1035,17 +1065,20 @@
               <div class="github-buttons-row2">
                 <button
                   id="uploadMergedOptimalBtn"
-                  class="btn btn-upload-merged"
+                  class="btn btn-upload-merged merged-subscription-upload-button"
                 >
                   <span>📤</span> 上传合并优选订阅
                 </button>
                 <button
                   id="uploadMergedBase64Btn"
-                  class="btn btn-subscription-upload"
+                  class="btn btn-subscription-upload merged-subscription-upload-button"
                 >
                   <span>📤</span> 上传合并的主要订阅
                 </button>
-                <button id="uploadPlainNodesBtn" class="btn btn-merge-upload">
+                <button
+                  id="uploadPlainNodesBtn"
+                  class="btn btn-merge-upload merged-subscription-upload-button"
+                >
                   <span>📤</span> 上传合并明文订阅
                 </button>
               </div>
@@ -2064,7 +2097,7 @@
             if (!base) {
               showNotification(
                 "错误",
-                "请输入要删除的文件名（例如：OptimalNode）",
+                "请输入要删除的文件名（例如：Optimal）",
                 "error",
               );
               return;
@@ -2492,6 +2525,8 @@
           { id: "dark", name: "经典暗夜", icon: "🌙", dark: true },
           { id: "style3", name: "澄光浅色", icon: "🌿", dark: false },
           { id: "style4", name: "澄光暗夜", icon: "🌌", dark: true },
+          { id: "style5", name: "莓紫轻羽", icon: "🌸", dark: false },
+          { id: "style6", name: "莓紫夜幕", icon: "🌑", dark: true },
         ];
         let activeThemeIndex = Math.max(
           0,
@@ -5534,11 +5569,11 @@
 
           let downloadFiles = [];
 
-          if (targetFile === "MainNode") {
+          if (targetFile === "Main") {
             downloadFiles = [{ file: mainNodeFile, type: "base64" }];
-          } else if (targetFile === "PlainNode") {
+          } else if (targetFile === "Plain") {
             downloadFiles = [{ file: plainNodeFile, type: "plain" }];
-          } else if (targetFile === "OptimalNode") {
+          } else if (targetFile === "Optimal") {
             downloadFiles = [{ file: optimalNodeFile, type: "base64" }];
           } else {
             // 自定义路径，尝试下载
@@ -6026,15 +6061,15 @@
           // 根据目标路径决定上传格式
           let contentToUpload = "";
 
-          if (targetFile === "PlainNode") {
-            // PlainNode：上传明文节点
+          if (targetFile === "Plain") {
+            // Plain：上传明文节点
             const plainText = data.vlessLinks.join("\n");
             contentToUpload = utf8ToBase64(plainText);
           } else if (
-            targetFile === "OptimalNode" ||
-            targetFile === "MainNode"
+            targetFile === "Optimal" ||
+            targetFile === "Main"
           ) {
-            // OptimalNode 和 MainNode：上传双重Base64编码
+            // Optimal 和 Main：上传双重Base64编码
             const firstBase64 = utf8ToBase64(data.vlessLinks.join("\n"));
             contentToUpload = btoa(firstBase64);
           } else {
@@ -6048,7 +6083,7 @@
           const result = await uploadToGitHub(
             targetFile,
             contentToUpload,
-            targetFile !== "PlainNode",
+            targetFile !== "Plain",
             `上传本地订阅到 ${targetFile} - ${new Date().toLocaleString()} (${data.vlessLinks.length}节点)`,
           );
 
@@ -6122,7 +6157,7 @@
         }
       }
 
-      // 修复：上传合并Base64到MainNode
+      // 修复：上传合并Base64到Main
       async function uploadMergedBase64() {
         showLoading(true, "uploadMergedBase64Btn");
         try {
@@ -6224,7 +6259,7 @@
         }
       }
 
-      // 修复：上传合并订阅到OptimalNode
+      // 修复：上传合并订阅到Optimal
       async function uploadMergedOptimal() {
         showLoading(true, "uploadMergedOptimalBtn");
         try {
@@ -6276,7 +6311,7 @@
             result.githubIoUrl,
           );
 
-          // 同时上传对应的YAML配置文件（使用与MainNode相同的文件名模式）
+          // 同时上传对应的YAML配置文件（使用与Main相同的文件名模式）
           try {
             const yamlFileName =
               optimalNodeFile.replace(/\.[^/.]+$/, "") + ".yaml";
@@ -6366,14 +6401,14 @@
           let contentToUpload = "";
 
           // 根据目标路径决定上传格式
-          if (targetFile === "PlainNode") {
-            // PlainNode：上传明文节点
+          if (targetFile === "Plain") {
+            // Plain：上传明文节点
             contentToUpload = utf8ToBase64(plainText);
           } else if (
-            targetFile === "OptimalNode" ||
-            targetFile === "MainNode"
+            targetFile === "Optimal" ||
+            targetFile === "Main"
           ) {
-            // OptimalNode 和 MainNode：上传双重Base64编码
+            // Optimal 和 Main：上传双重Base64编码
             const firstBase64 = utf8ToBase64(plainText);
             contentToUpload = btoa(firstBase64);
           } else {
@@ -6386,7 +6421,7 @@
           const result = await uploadToGitHub(
             targetFile,
             contentToUpload,
-            targetFile !== "PlainNode",
+            targetFile !== "Plain",
             `上传合并订阅到指定路径 ${targetFile} - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
           );
 
@@ -6499,41 +6534,41 @@
           const firstBase64 = utf8ToBase64(plainText);
           const finalContent = btoa(firstBase64);
 
-          // 6. 上传Base64订阅文件（MainNode）- 双重Base64编码
+          // 6. 上传Base64订阅文件（Main）- 双重Base64编码
           const mainResult = await uploadToGitHub(
             mainNodeFile,
             finalContent,
             true,
-            `一键同步更新MainNode - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
+            `一键同步更新Main - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
           );
 
-          console.log("✅ MainNode 上传成功");
+          console.log("✅ Main 上传成功");
 
-          // 7. 上传明文文件（PlainNode）
+          // 7. 上传明文文件（Plain）
           try {
             await uploadToGitHub(
               plainNodeFile,
               utf8ToBase64(plainText),
               false,
-              `一键同步明文节点到PlainNode - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
+              `一键同步明文节点到Plain - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
             );
-            console.log("✅ PlainNode 上传成功");
+            console.log("✅ Plain 上传成功");
           } catch (e) {
-            console.warn("⚠️ PlainNode 上传失败，但MainNode已成功上传:", e);
+            console.warn("⚠️ Plain 上传失败，但Main已成功上传:", e);
             // 不抛出错误，继续执行
           }
 
-          // 8. 上传合并订阅到OptimalNode
+          // 8. 上传合并订阅到Optimal
           try {
             await uploadToGitHub(
               optimalNodeFile,
               finalContent,
               true,
-              `一键同步合并订阅到OptimalNode - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
+              `一键同步合并订阅到Optimal - ${new Date().toLocaleString()} (${data.uniqueNodes.length}节点)`,
             );
-            console.log("✅ OptimalNode 上传成功");
+            console.log("✅ Optimal 上传成功");
           } catch (e) {
-            console.warn("⚠️ OptimalNode 上传失败，但其他文件已成功上传:", e);
+            console.warn("⚠️ Optimal 上传失败，但其他文件已成功上传:", e);
             // 不抛出错误，继续执行
           }
 

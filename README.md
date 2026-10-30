@@ -12,21 +12,23 @@
 
 默认三个节点订阅文件（Pages 版本示例）：
 
-- 主要订阅（Pages）: https://daizhouhui.github.io/CustomNode/MainNode
-- 优选订阅（Pages）: https://daizhouhui.github.io/CustomNode/OptimalNode
-- 明文订阅（Pages）: https://daizhouhui.github.io/CustomNode/PlainNode
+- 主要订阅（Pages）: https://daizhouhui.github.io/CustomNode/Main
+- 优选订阅（Pages）: https://daizhouhui.github.io/CustomNode/Optimal
+- 明文订阅（Pages）: https://daizhouhui.github.io/CustomNode/Plain
 
 默认三个节点订阅文件（Raw 版本示例）：
 
-- 主要订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/MainNode
-- 优选订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/OptimalNode
-- 明文订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/PlainNode
+- 主要订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/Main
+- 优选订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/Optimal
+- 明文订阅（Raw）: https://raw.githubusercontent.com/DaiZhouHui/CustomNode/main/Plain
 
 ## 使用指南
 
 本工具可以从 CSV/TXT 或 IP:端口文本生成 VLESS 节点，也可以载入已有的 VLESS 直链。生成结果可在页面中复制、下载、转换成 Base64 或 YAML，并可选择与 GitHub 仓库中的订阅合并。
 
-页面快捷操作区可循环切换四种主题，所选样式会保存在当前浏览器中。新浏览器的默认主题由根目录的 `config.js` 控制；将 `defaultTheme` 设置为 `1`（经典浅色）、`2`（经典暗夜）、`3`（澄光浅色）或 `4`（澄光暗夜）。已保存的浏览器主题优先于该默认设置。
+页面快捷操作区可循环切换六种主题，所选样式会保存在当前浏览器中。新浏览器的默认主题由根目录的 `config.js` 控制；将 `defaultTheme` 设置为 `1`（经典浅色）、`2`（经典暗夜）、`3`（澄光浅色）、`4`（澄光暗夜）、`5`（莓紫轻羽）或 `6`（莓紫夜幕）。已保存的浏览器主题优先于该默认设置。
+
+三个“上传合并”订阅按钮默认隐藏。需要显示时，在 `config.js` 中将 `showMergedSubscriptionUploadButtons` 设为 `true`。默认订阅文件名为 `Optimal`、`Main` 和 `Plain`。
 
 ## 1. 导入节点数据
 
