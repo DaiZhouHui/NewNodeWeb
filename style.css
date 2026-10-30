@@ -31,6 +31,7 @@
   --success-color: #21806d;
   --info-color: #397f8a;
   --warning-color: #b7743c;
+  --danger-color: #b84d4d;
   --github-color: #263d45;
   --light-color: #f4f7f7;
   --border-radius: 16px;
@@ -267,7 +268,7 @@ label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #4a5568;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -277,7 +278,7 @@ select {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   font-size: 14px;
   transition: var(--transition);
   background: var(--surface-color);
@@ -286,15 +287,19 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-  outline: none;
+  outline: 2px solid transparent;
   border-color: var(--primary-color);
   box-shadow: var(--focus-ring);
-  transform: translateY(-1px);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9aa8ad;
 }
 
 /* 禁用状态的输入框 */
 textarea:disabled {
-  background-color: #f7fafc;
+  background-color: var(--surface-subtle);
   cursor: not-allowed;
   opacity: 0.7;
   border-color: #e2e8f0;
@@ -320,6 +325,7 @@ textarea {
   height: 18px;
   border-radius: 3px;
   cursor: pointer;
+  accent-color: var(--primary-color);
 }
 
 .checkbox-group label {
@@ -332,11 +338,12 @@ textarea {
 }
 
 .btn {
-  padding: 11px 18px;
+  padding: 10px 16px;
   border: none;
-  border-radius: 6px;
+  border-radius: 9px;
   font-size: 14px;
   font-weight: 600;
+  min-height: 40px;
   cursor: pointer;
   transition: var(--transition);
   display: inline-flex;
@@ -374,11 +381,16 @@ textarea {
     var(--btn-blue-end) 100%
   );
   color: white;
+  box-shadow: 0 3px 8px rgba(23, 109, 104, 0.16);
 }
 
 /* 调整成功/复制类按钮的颜色（替换为紫色渐变） */
 .btn-success {
-  background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--btn-green-start) 0%,
+    var(--btn-green-end) 100%
+  );
   color: white;
 }
 
@@ -401,7 +413,7 @@ textarea {
 }
 
 .btn-github {
-  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  background: linear-gradient(135deg, #334a52 0%, #253a41 100%);
   color: white;
 }
 
@@ -416,13 +428,13 @@ textarea {
 }
 
 .file-upload-area {
-  border: 2px dashed #cbd5e0;
-  border-radius: 6px;
-  padding: 28px 18px;
+  border: 1.5px dashed #b9c9cb;
+  border-radius: 12px;
+  padding: 32px 20px;
   text-align: center;
   cursor: pointer;
   transition: var(--transition);
-  background: #fafbff;
+  background: var(--surface-subtle);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -433,7 +445,8 @@ textarea {
 
 .file-upload-area.dragover {
   border-color: var(--primary-color);
-  background: #e8edff;
+  background: #e8f3f1;
+  box-shadow: inset 0 0 0 1px rgba(23, 109, 104, 0.08);
 }
 
 .file-upload-area .upload-icon {
@@ -444,7 +457,7 @@ textarea {
 }
 
 .file-upload-area p {
-  color: #4a5568;
+  color: var(--text-primary);
   margin-bottom: 6px;
   font-weight: 500;
   font-size: 0.95rem;
@@ -462,9 +475,9 @@ textarea {
 .file-info {
   margin-top: 14px;
   padding: 14px;
-  background: linear-gradient(135deg, #e8f4fd 0%, #d1e9ff 100%);
-  border-radius: 5px;
-  border: 1px solid #b6e0fe;
+  background: #edf5f3;
+  border-radius: var(--radius-control);
+  border: 1px solid #d5e7e2;
   display: none;
 }
 
@@ -480,7 +493,7 @@ textarea {
 
 .file-name {
   font-weight: 600;
-  color: #2d3748;
+  color: var(--text-primary);
   font-size: 0.9rem;
 }
 
@@ -490,10 +503,10 @@ textarea {
 }
 
 .remove-file-btn {
-  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-  color: #c53030;
+  background: #faeeee;
+  color: var(--danger-color);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--radius-small);
   padding: 7px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -502,9 +515,9 @@ textarea {
 }
 
 .remove-file-btn:hover {
-  background: linear-gradient(135deg, #feb2b2 0%, #fc8181 100%);
+  background: #f5dddd;
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(252, 129, 129, 0.3);
+  box-shadow: 0 3px 8px rgba(184, 77, 77, 0.12);
 }
 
 /* 配置行 */
@@ -562,23 +575,23 @@ textarea {
 
 /* 检测状态样式：输入框边框变色表示检测到/未检测 */
 input.detected {
-  border-color: #2da69a;
-  box-shadow: 0 0 0 4px rgba(45, 166, 154, 0.06);
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 3px rgba(33, 128, 109, 0.1);
 }
 
 input.not-detected {
-  border-color: #f56565;
-  box-shadow: 0 0 0 4px rgba(245, 101, 101, 0.06);
+  border-color: var(--danger-color);
+  box-shadow: 0 0 0 3px rgba(184, 77, 77, 0.1);
 }
 
 /* GitHub配置 - 修改样式 */
 .github-config {
-  background: linear-gradient(135deg, #f6f8fa 0%, #f0f4f8 100%);
-  border-radius: 6px;
+  background: var(--surface-subtle);
+  border-radius: 12px;
   padding: 16px;
   padding-bottom: 1px;
   margin-top: 0px;
-  border: 1px solid #e1e4e8;
+  border: 1px solid var(--border-color);
   position: relative;
 }
 
@@ -588,15 +601,15 @@ input.not-detected {
   top: 16px;
   right: 16px;
   font-size: 11px;
-  color: #718096;
-  background: rgba(255, 255, 255, 0.8);
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.92);
   padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid #e1e4e8;
+  border-radius: var(--radius-small);
+  border: 1px solid var(--border-color);
 }
 
 .github-config-help a {
-  color: #5d6de0;
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
 }
@@ -626,11 +639,11 @@ input.not-detected {
 
 /* 结果框 */
 .result-box {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border-radius: 6px;
-  padding: 16px;
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 18px;
   margin-top: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
   position: relative;
 }
 
@@ -639,9 +652,9 @@ input.not-detected {
   position: absolute;
   top: 0;
   left: 0;
-  width: 3px;
+  width: 4px;
   height: 100%;
-  background: linear-gradient(to bottom, #5d6de0, #4a56d2);
+  background: linear-gradient(to bottom, var(--btn-blue-start), var(--btn-blue-end));
 }
 
 .result-header {
@@ -652,7 +665,7 @@ input.not-detected {
 }
 
 .result-header h3 {
-  color: #2d3748;
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
 }
@@ -660,16 +673,16 @@ input.not-detected {
 .result-content {
   max-height: 200px;
   overflow-y: auto;
-  padding: 12px;
-  background: white;
-  border-radius: 5px;
-  border: 1px solid #e2e8f0;
+  padding: 14px;
+  background: #f7f9f9;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
   font-family: "Fira Code", "Consolas", "Monaco", monospace;
   font-size: 13px;
   line-height: 1.4;
   white-space: pre-wrap;
   word-break: break-all;
-  color: #4a5568;
+  color: var(--text-secondary);
 }
 
 .result-content.empty {
@@ -679,11 +692,11 @@ input.not-detected {
 
 /* 生成部分 */
 .generate-section {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border-radius: 6px;
-  padding: 16px;
+  background: var(--surface-color);
+  border-radius: 12px;
+  padding: 18px;
   margin-top: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border-color);
 }
 
 /* GitHub按钮区域 - 重新调整布局 */
@@ -820,12 +833,12 @@ input.not-detected {
 .link-input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-small);
+  background: var(--surface-color);
   font-family: "Fira Code", "Consolas", "Monaco", monospace;
   font-size: 13px;
-  color: #495057;
+  color: var(--text-secondary);
 }
 
 .btn-sm {
@@ -1197,28 +1210,28 @@ input.not-detected {
 
 /* 修改上传按钮颜色（恢复自备份） */
 .btn-local-upload {
-  background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+  background: linear-gradient(135deg, var(--btn-blue-start) 0%, var(--btn-blue-end) 100%);
   color: white;
 }
 
 .btn-merge-upload {
-  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  background: linear-gradient(135deg, var(--btn-orange-start) 0%, var(--btn-orange-end) 100%);
   color: white;
 }
 
 .btn-subscription-upload {
-  background: linear-gradient(135deg, #0bc5ea 0%, #00b5d8 100%);
+  background: linear-gradient(135deg, var(--btn-cyan-start) 0%, var(--btn-cyan-end) 100%);
   color: white;
 }
 
 .btn-oneclick-sync {
-  background: linear-gradient(135deg, #e0559c 0%, #ce4a8c 100%);
+  background: linear-gradient(135deg, var(--btn-green-start) 0%, var(--btn-green-end) 100%);
   color: white;
 }
 
 /* 新增：上传合并订阅至指定路径按钮 */
 .btn-merge-to-path {
-  background: linear-gradient(135deg, #9b2c2c 0%, #822727 100%);
+  background: linear-gradient(135deg, #42545a 0%, #2d4046 100%);
   color: white;
 }
 
@@ -1232,7 +1245,7 @@ input.not-detected {
 /* 状态消息 */
 .status-message {
   padding: 14px 16px;
-  border-radius: 6px;
+  border-radius: var(--radius-control);
   margin-bottom: 16px;
   display: none;
   animation: fadeIn 0.3s ease-out;
@@ -1240,23 +1253,23 @@ input.not-detected {
 }
 
 .status-success {
-  background: linear-gradient(135deg, #c6f6d5 0%, #9ae6b4 100%);
-  color: #22543d;
-  border-left-color: #38a169;
+  background: #eaf4ef;
+  color: #24634d;
+  border-left-color: var(--success-color);
   display: block;
 }
 
 .status-error {
-  background: linear-gradient(135deg, #fed7d7 0%, #feb2b2 100%);
-  color: #742a2a;
-  border-left-color: #e53e3e;
+  background: #faeeee;
+  color: #873e3e;
+  border-left-color: var(--danger-color);
   display: block;
 }
 
 .status-info {
-  background: linear-gradient(135deg, #bee3f8 0%, #90cdf4 100%);
-  color: #2a4365;
-  border-left-color: #3182ce;
+  background: #eaf2f3;
+  color: #355a63;
+  border-left-color: var(--info-color);
   display: block;
 }
 
@@ -1523,40 +1536,40 @@ input.not-detected {
 
 /* 提高饱和度但避免马克龙色调 */
 .btn-primary:hover {
-  background: linear-gradient(135deg, #4a56d2 0%, #3f4bbf 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
 }
 
 .btn-success:hover {
-  background: linear-gradient(135deg, #25958a 0%, #1e857a 100%);
+  background: linear-gradient(135deg, #1d705b 0%, #155c4b 100%);
 }
 
 .btn-info:hover {
-  background: linear-gradient(135deg, #2f7ec7 0%, #276fb2 100%);
+  background: linear-gradient(135deg, #2b6974 0%, #235964 100%);
 }
 
 .btn-warning:hover {
-  background: linear-gradient(135deg, #ce4a8c 0%, #be4081 100%);
+  background: linear-gradient(135deg, #ad6d31 0%, #965927 100%);
 }
 
 .btn-github:hover {
-  background: linear-gradient(135deg, #1a202c 0%, #0d1117 100%);
+  background: linear-gradient(135deg, #253a41 0%, #1d3036 100%);
 }
 
 /* 智能分割说明 */
 .smart-split-info {
-  background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
-  border-radius: 6px;
+  background: #eaf4f1;
+  border-radius: var(--radius-control);
   padding: 14px;
   margin-top: 12px;
-  border: 1px solid #81e6d9;
+  border: 1px solid #cfe3dc;
   font-size: 13px;
-  color: #234e52;
+  color: #365d57;
 }
 
 .smart-split-info h4 {
   font-size: 14px;
   margin-bottom: 8px;
-  color: #234e52;
+  color: #2c514b;
 }
 
 .smart-split-info ul {
@@ -1570,14 +1583,14 @@ input.not-detected {
 
 /* CSV格式示例 */
 .csv-example {
-  background: #f7fafc;
-  border-radius: 4px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-small);
   padding: 12px;
   margin-top: 10px;
   font-family: "Fira Code", monospace;
   font-size: 12px;
-  color: #4a5568;
-  border: 1px dashed #cbd5e0;
+  color: var(--text-secondary);
+  border: 1px dashed #c5d3d5;
 }
 
 /* ==================== */
@@ -1794,7 +1807,7 @@ input.not-detected {
 
 /* 新增：上传按钮样式 */
 .btn-upload-merged {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  background: linear-gradient(135deg, var(--btn-green-start) 0%, var(--btn-green-end) 100%);
   color: white;
 }
 
