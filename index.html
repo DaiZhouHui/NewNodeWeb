@@ -1657,6 +1657,31 @@
         initHeaderToggle();
         initThemeToggle();
 
+        // 初始化默认配置值（从config.js读取）
+        try {
+          if (window.NODE_WEB_CONFIG && window.NODE_WEB_CONFIG.defaultVlessConfig) {
+            const config = window.NODE_WEB_CONFIG.defaultVlessConfig;
+            if (config.uuid) {
+              const uuidInput = document.getElementById("uuid");
+              if (uuidInput) uuidInput.value = config.uuid;
+            }
+            if (config.host) {
+              const hostInput = document.getElementById("host");
+              if (hostInput) hostInput.value = config.host;
+            }
+            if (config.sni) {
+              const sniInput = document.getElementById("sni");
+              if (sniInput) sniInput.value = config.sni;
+            }
+            if (config.path) {
+              const pathInput = document.getElementById("customPath");
+              if (pathInput) pathInput.value = config.path;
+            }
+          }
+        } catch (e) {
+          console.warn("加载默认配置失败:", e);
+        }
+
         // 初始化版本号显示（日期版号，短格式：YY.MM.DD.HH）
         try {
           const vEl = document.getElementById("versionText");
